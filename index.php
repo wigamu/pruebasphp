@@ -1,28 +1,42 @@
-<?php
-
-$conn_string = "dbname=d8bgoddl4rn1t4 host=ec2-174-129-29-118.compute-1.amazonaws.com port=5432 user=atvqvoqvbfoerf password=sJBoizX9YrgzkzXdrH9YTbIWli sslmode=require";
-
-$dbconn = pg_connect($conn_string) 
-          or die('No puedo conectarme: ' . pg_last_error());
-
-echo "Conectado a la Base de Datos!";
-
-$sql="SELECT id_cliente, nombre, apellido, direccion, email, documento_cliente, tipo_cliente, ciudad_cliente, tipo_documento
-	FROM public.clientes";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link   href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/bootstrap.min.js"></script>
+</head>
  
-$result = pg_query($dbconn, $sql);
-if(!$result)
-{
-	echo "An error occurred.\n";
-	exit;
-}
- 
-echo "<table>";
-	while ($row = pg_fetch_array($result))
-	{
-		echo "<tr>";
-			echo "<td>Años:".$row["nombre"]."</td>";
-		echo "<tr>";
-	}
-echo "<table>";
-?>
+<body>
+    <div class="container">
+            <div class="row">
+                <h3>PHP CRUD Grid</h3>
+            </div>
+            <div class="row">
+                <table class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email Address</th>
+                      <th>Mobile Number</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <?php
+                   include 'database.php';
+                   $pdo = Database::connect();
+                   $sql = 'SELECT * FROM customers ORDER BY id DESC';
+                   foreach ($pdo->query($sql) as $row) {
+                            echo '<tr>';
+                            echo '<td>'. $row['name'] . '</td>';
+                            echo '<td>'. $row['email'] . '</td>';
+                            echo '<td>'. $row['mobile'] . '</td>';
+                            echo '</tr>';
+                   }
+                   Database::disconnect();
+                  ?>
+                  </tbody>
+            </table>
+        </div>
+    </div> <!-- /container -->
+  </body>
+</html>
